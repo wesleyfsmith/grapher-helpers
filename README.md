@@ -114,7 +114,7 @@ OR you can still get the link manually:
 
 ```js
 let practice = Practices.findOne();
-Practices.findLink(practice._id, 'employees').fetchOne();
+Practices.findLink(practice._id, 'createdBy').fetchOne();
 ```
 
 Finally, you can also create a default query for documents that were created by a specific user:
