@@ -1,6 +1,6 @@
 ## grapher-helpers
 
-Provides common grapher querires out of the box, as well as creates helper methods for links providing a more OOP syntax.
+Provides common [cultofcoders:grapher](https://github.com/cult-of-coders/grapher) querires out of the box, as well as creates helper methods for links providing a more OOP syntax.
 
 To install:
 
