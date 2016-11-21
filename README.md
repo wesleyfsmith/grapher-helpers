@@ -34,4 +34,17 @@ Practices.findLink(practice._id, 'employees').fetch();
 ```
 
 ### Common queries
-Most often you want to query and object 
+Most often you want to query an object and just get all the fields by default. With you package you can do this by running:
+
+```js
+let query = Practices.findQuery()
+```
+
+This creates a query that will grab all the fields off the collections' simple schema.
+
+If you want to only query a single document you can run:
+
+```js
+let query = Practices.findOneQuery('id')
+```
+This creates a query that will grab all the fields off the collections' simple schema, and then only query for that one document.
