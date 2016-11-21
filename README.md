@@ -33,6 +33,8 @@ let practice = Practices.findOne();
 Practices.findLink(practice._id, 'employees').fetch();
 ```
 
+Note that if you haven't subscribed to the appropriate documents these helpers won't return anything.
+
 ### Common queries
 Most often you want to query an object and just get all the fields by default. With you package you can do this by running:
 
