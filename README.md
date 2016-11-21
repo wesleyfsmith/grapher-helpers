@@ -50,3 +50,77 @@ If you want to only query a single document you can run:
 let query = Practices.findOneQuery('id')
 ```
 This creates a query that will grab all the fields off the collections' simple schema, and then only query for that one document.
+
+### Created by query
+
+If you create your collection like this:
+
+```js
+
+import {createdByLink} from 'meteor/wesleyfsmith:grapher-helpers';
+
+Practices = new Mongo.Collection('practices');
+
+Practices.attachSchema(new SimpleSchema({
+  name: {
+    type: String
+  },
+  employeeIds: {
+    type: [String],
+    optional: true,
+    autoform: {
+      omit: true
+    }
+  },
+  createdAt: {
+      type: Date,
+      defaultValue: new Date(),
+      autoform: {
+        omit: true
+      }
+  },
+  createdById: createdByLink(Practices)
+}
+```
+
+The createdByLink function will set the following on your simple schema:
+
+```js
+createdById: {
+    type: String,
+    denyUpdate: true, // for a createdBy, shouldn't be able to update.
+    autoValue: function() {
+      if (this.isInsert) {
+        return this.userId;
+      }
+    },
+    allowedValues: function () {
+      return this.userId;
+    },
+    autoform: {
+      omit: true
+    }
+  }
+```
+
+AND it will create a link as well as a helper. Now you can call:
+
+```js 
+let practice = Practices.findOne();
+practice.createdBy(); // returns the creator, assuming you've subscribed to that document
+```
+
+OR you can still get the link manually:
+
+```js
+let practice = Practices.findOne();
+Practices.findLink(practice._id, 'employees').fetchOne();
+```
+
+Finally, you can also create a default query for documents that were created by a specific user:
+
+```js
+Practices.findCreatedByQuery(); 
+```
+
+If you specify an id, it will query for documents created with that id, otherwise it will default to Meteor.userId(); 
