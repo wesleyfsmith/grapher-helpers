@@ -2,13 +2,34 @@ Meteor.Collection.prototype.findQuery = function() {
   return this.createQuery(this.getFieldsAsObject());
 }
 
+Meteor.Collection.prototype.query = function() {
+  return this.createQuery(this.getFieldsAsObject());
+}
+
 Meteor.Collection.prototype.findOneQuery = function(id) {
   let queryObj = this.getFieldsAsObject();
   queryObj.$filters = {_id: id};
   return this.createQuery(queryObj);
 }
 
+Meteor.Collection.prototype.queryOne = function(id) {
+  let queryObj = this.getFieldsAsObject();
+  queryObj.$filters = {_id: id};
+  //TODO add limit 1 filter?
+  return this.createQuery(queryObj);
+}
+
 Meteor.Collection.prototype.findCreatedByQuery = function(id) {
+  let queryObj = this.getFieldsAsObject();
+  if (id) {
+    queryObj.$filters = {createdById: id};
+  } else {
+    queryObj.$filters = {createdById: Meteor.userId()};
+  }
+  return this.createQuery(queryObj);
+}
+
+Meteor.Collection.prototype.queryCreatedBy = function(id) {
   let queryObj = this.getFieldsAsObject();
   if (id) {
     queryObj.$filters = {createdById: id};
