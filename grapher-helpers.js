@@ -1,9 +1,18 @@
+const addFilters = (queryObj, options, additionalFilters) => {
+  queryObj.$filters = additionalFilters;
+  _.extend(queryObj, options);
+};
+
 Meteor.Collection.prototype.findQuery = function() {
   return this.createQuery(this.getFieldsAsObject());
 }
 
-Meteor.Collection.prototype.query = function() {
-  return this.createQuery(this.getFieldsAsObject());
+Meteor.Collection.prototype.query = function(options) {
+  let queryObj = this.getFieldsAsObject();
+
+  addFilters(queryObj, options, {});
+
+  return this.createQuery(queryObj);
 }
 
 Meteor.Collection.prototype.findOneQuery = function(id) {
@@ -12,9 +21,12 @@ Meteor.Collection.prototype.findOneQuery = function(id) {
   return this.createQuery(queryObj);
 }
 
-Meteor.Collection.prototype.queryOne = function(id) {
+Meteor.Collection.prototype.queryOne = function(id, options) {
   let queryObj = this.getFieldsAsObject();
-  queryObj.$filters = {_id: id};
+  options.$options.limit = 1;
+
+  addFilters(queryObj, options, {_id: id})
+
   //TODO add limit 1 filter?
   return this.createQuery(queryObj);
 }
@@ -29,12 +41,12 @@ Meteor.Collection.prototype.findCreatedByQuery = function(id) {
   return this.createQuery(queryObj);
 }
 
-Meteor.Collection.prototype.queryCreatedBy = function(id) {
+Meteor.Collection.prototype.queryCreatedBy = function(id, options) {
   let queryObj = this.getFieldsAsObject();
   if (id) {
-    queryObj.$filters = {createdById: id};
+    addFilters(queryObj, options, {createdById: id})
   } else {
-    queryObj.$filters = {createdById: Meteor.userId()};
+    addFilters(queryObj, options, {createdById: Meteor.userId()});
   }
   return this.createQuery(queryObj);
 }
