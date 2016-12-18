@@ -1,5 +1,8 @@
 const addFilters = (queryObj, options, additionalFilters) => {
   queryObj.$filters = additionalFilters;
+  if (!options['$options']) {
+    options = {$options: options};
+  }
   _.extend(queryObj, options);
 };
 
@@ -41,12 +44,13 @@ Meteor.Collection.prototype.findCreatedByQuery = function(id) {
   return this.createQuery(queryObj);
 }
 
-Meteor.Collection.prototype.queryCreatedBy = function(id, options) {
+Meteor.Collection.prototype.queryCreatedBy = function(param, options) { //TODO: is there a cleaner way to do this?
   let queryObj = this.getFieldsAsObject();
-  if (id) {
-    addFilters(queryObj, options, {createdById: id})
-  } else {
-    addFilters(queryObj, options, {createdById: Meteor.userId()});
+  if (typeof param === 'string') {
+    addFilters(queryObj, options, {createdById: param})
+  }
+  if (typeof param === 'object') {
+    addFilters(queryObj, param, {createdById: Meteor.userId()});
   }
   return this.createQuery(queryObj);
 }
