@@ -47,7 +47,7 @@ Meteor.Collection.prototype.findCreatedByQuery = function(id) {
 Meteor.Collection.prototype.queryCreatedBy = function(param, options) { //TODO: is there a cleaner way to do this?
   let queryObj = this.getFieldsAsObject();
   if (typeof param === 'string') {
-    addFilters(queryObj, options, {createdById: param})
+    addFilters(queryObj, options, {createdById: param});
   }
   if (typeof param === 'object') {
     addFilters(queryObj, param, {createdById: Meteor.userId()});
