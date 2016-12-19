@@ -1,6 +1,6 @@
 Package.describe({
   name: 'wesleyfsmith:grapher-helpers',
-  version: '1.0.2',
+  version: '1.0.3',
   // Brief, one-line summary of the package.
   summary: 'Collection and document helpers for common grapher commands.',
   // URL to the Git repository containing the source code for this package.
