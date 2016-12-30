@@ -26,9 +26,9 @@ Meteor.Collection.prototype.findOneQuery = function(id) {
 
 Meteor.Collection.prototype.queryOne = function(id, options) {
   let queryObj = this.getFieldsAsObject();
-  options.$options.limit = 1;
+  // options.$options.limit = 1;
 
-  addFilters(queryObj, options, {_id: id})
+  addFilters(queryObj, options || {}, {_id: id})
 
   //TODO add limit 1 filter?
   return this.createQuery(queryObj);
@@ -84,14 +84,10 @@ export const createdByLink = function(collection) {
       return collection.getLink(this._id, 'createdBy').fetch();
     }
   });
-  return {
+
+  let result = {
     type: String,
     denyUpdate: true, // for a createdBy, shouldn't be able to update.
-    autoValue: function() {
-      if (this.isInsert) {
-        return this.userId;
-      }
-    },
     allowedValues: function () {
       return this.userId;
     },
@@ -99,4 +95,14 @@ export const createdByLink = function(collection) {
       omit: true
     }
   }
+
+  if (!Meteor.isTest) {
+    result.autoValue = function() {
+      if (this.isInsert) {
+        return this.userId;
+      }
+    };
+  }
+
+  return result;
 }
