@@ -76,9 +76,11 @@ export const createdByLink = function(collection) {
     createdBy: {
       collection: Meteor.users,
       type: 'one',
-      field: 'createdById'
+      field: 'createdById',
     }
   });
+
+  collection.getLink(null, 'createdBy').linker.linkConfig.grabExisting = {};
   collection.helpers({
     createdBy() {
       return collection.getLink(this._id, 'createdBy').fetch();
